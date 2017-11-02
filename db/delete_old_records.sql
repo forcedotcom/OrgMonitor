@@ -1,0 +1,1 @@
+delete from orgsdata where created_at < now() - interval '365 days'

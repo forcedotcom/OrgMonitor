@@ -1,0 +1,29 @@
+{
+  "name": "OrgMonitor",
+  "version": "1.0.0",
+  "license": "BSD-3-Clause",
+  "engines": {
+    "node": "8.9.0"
+  },
+  "dependencies": {
+    "agenda": "1.0.3",
+    "bluebird": "3.5.1",
+    "body-parser": "1.18.2",
+    "compression": "1.7.1",
+    "deasync": "0.1.10",
+    "express": "4.16.2",
+    "express-session": "1.15.6",
+    "force-ssl-heroku": "1.0.2",
+    "helmet": "3.9.0",
+    "jsforce": "1.8.0",
+    "lodash": "4.17.4",
+    "massive": "4.4.0",
+    "numeral": "2.0.6",
+    "omit-deep": "0.3.0",
+    "passport": "0.4.0",
+    "passport-saml": "0.30.0",
+    "pg-monitor": "0.8.3",
+    "pug": "2.0.0-rc.4",
+    "secure-compare": "3.0.1"
+  }
+}

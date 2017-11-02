@@ -1,0 +1,152 @@
+body {
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background-color: #fcfcfc
+}
+
+.home {
+  display: block;
+  margin-top: 2rem;
+}
+
+h1 {
+  margin-top: .5rem;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1200px;
+    max-width: 100%;
+  }
+}
+@media (min-width: 1400px) {
+  .container {
+    width: 1400px;
+    max-width: 100%;
+  }
+  .modal-lg {
+    max-width: 1400px;
+  }
+}
+@media (min-width: 1500px) {
+  .container {
+    width: 1500px;
+    max-width: 100%;
+  }
+}
+
+.card {
+  min-height: 400px;
+  border-radius: 2px;
+  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
+  box-shadow: -1px 2px 3px rgba(0, 0, 0, 0.08);
+}
+.card a {
+  color: #292b2c;
+}
+.card.bg-danger a {
+  color: #fff;
+}
+.card.bg-danger .text-muted {
+  color: #EF9A9A !important;
+}
+
+.card a:active, .card a:hover, .card a:link, .card a:visited  {
+  text-decoration: none
+}
+.card p.description {
+  font-size:.9rem;
+}
+.card p.info {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.icon {
+  font-size: 2.5rem;
+  color: #292b2c;
+  margin: 5px 15px 0 0;
+}
+
+.bd-pageheader {
+    padding: 2rem 15px;
+    margin-bottom: 1.5rem;
+    color: rgba(255,255,255,.65);
+    text-align: center;
+    background-color: #1565C0;
+}
+
+@media (min-width: 576px) {
+  .bd-pageheader {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    text-align: left;
+  }
+}
+
+.bd-pageheader h1 {
+  font-size: 3rem;
+  font-weight: normal;
+  color: #fff;
+}
+
+.bd-pageheader p {
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+/*
+.row {
+  margin-bottom:1rem;
+}*/
+
+.media {
+  margin-bottom: .5rem;
+}
+
+.media a {
+  color:black;
+  text-decoration: none
+}
+
+.media h3, .media p {
+  margin-bottom:0;
+}
+
+/* The ribbon */
+.ribbons {
+  position: absolute;
+  text-align: center;
+  top: 1rem;
+  right: 0;
+  left: auto;
+  position: absolute;
+}
+
+.ribbon {
+  width: 100px;
+  line-height: 25px;
+  font-size: .7rem;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  margin-bottom: 5px;
+  color: #f0f0f0;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Colors */
+.ribbon.black{background: #424242;}
+.ribbon.gray{background: #BDBDBD;}
+.ribbon.blue{background: #42A5F5;}
+
+.btn-group {
+  margin-top: 4px;
+}
+
+.indicator {
+  display:block;
+}
+.indicator .fa {
+  margin-right: 5px
+}

@@ -1,0 +1,85 @@
+//-
+  Copyright (c) 2017, salesforce.com, inc.
+  All rights reserved.
+  Licensed under the BSD 3-Clause license.
+  For full license text, see LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+doctype html
+html(lang="en")
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Rank
+    link(rel="stylesheet" href="/public/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/public/font-awesome-4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/public/datatables/dataTables.bootstrap4.min.css")
+    link(rel="stylesheet" href="/public/datatables/fixedColumns.dataTables.min.css")
+    link(rel="stylesheet" href="/public/datatables/fixedColumns.bootstrap4.min.css")
+    link(rel="stylesheet" href="/public/custom.css")
+  body
+    nav(class="navbar navbar-expand-lg navbar-light bg-faded")
+      button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      div.container
+        div(class="collapse navbar-collapse" id="navbarSupportedContent")
+          ul.navbar-nav.mr-auto
+            li.nav-item
+              a.nav-item.nav-link(href="/") Home
+            li.nav-item
+              a.nav-item.nav-link.active Rank
+    div.bd-pageheader
+        div.container
+          h1 Rank
+          p.lead Sort your Orgs by any of the collected metrics
+    div.container
+      .row
+        table.table.nowrap(cellspacing=0, cellpadding=0, width="100%")
+          thead.thead-light
+            tr
+              th orgId
+              each answer in orgs[0].answers
+                th= answer.name
+          each org in orgs
+            tr
+              td
+                a(href="/get/" + org.orgId) #{org.orgId}
+              each answer in org.answers
+                if answer.error
+                  td ERR
+                else if answer.a.records && answer.a.records[0] && answer.a.records[0].Score
+                  td #{answer.a.records[0].Score}%
+                else
+                  td= answer.a.totalSize
+  script(type="text/javascript" src="/public/jquery.min.js")
+  script(type="text/javascript" src="/public/popper.min.js")
+  script(type="text/javascript" src="/public/bootstrap-4.0.0-beta.2-dist/js/bootstrap.min.js")
+  script(type="text/javascript" src="/public/datatables/jquery.dataTables.min.js")
+  script(type="text/javascript" src="/public/datatables/dataTables.bootstrap4.min.js")
+  script(type="text/javascript" src="/public/datatables/dataTables.fixedColumns.min.js")    
+  script.
+    let table
+    $(document).ready(function() {
+      var calcDataTableHeight = function() {
+        return $(window).height() - 400
+      };
+
+      table = $('table').dataTable({
+        pageLength: -1,
+        paging: false,
+        searching: false,
+        scrollX: true,
+        scrollY: calcDataTableHeight(),
+        scrollCollapse: true,
+        fixedColumns: {
+          leftColumns: 1,
+        },
+        "dom": 't'
+      });
+
+      $(window).resize(function() {
+        $('div.dataTables_scrollBody').css({
+          'height': calcDataTableHeight(),
+          'max-height': calcDataTableHeight()
+        });
+        table.fnDraw();
+      });
+    });

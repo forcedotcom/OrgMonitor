@@ -1,0 +1,90 @@
+//-
+  Copyright (c) 2017, salesforce.com, inc.
+  All rights reserved.
+  Licensed under the BSD 3-Clause license.
+  For full license text, see LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  
+doctype html
+html(lang="en")
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Monitored Orgs
+    link(rel="stylesheet" href="/public/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/public/font-awesome-4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/public/custom.css")
+  body
+    nav(class="navbar navbar-expand-lg navbar-light bg-faded")
+      button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      div.container
+        div(class="collapse navbar-collapse" id="navbarSupportedContent")
+          ul.navbar-nav.mr-auto
+            li.nav-item
+              a.nav-item.nav-link.active Home
+            li.nav-item
+              a.nav-item.nav-link(href="/rank") Rank
+    div.bd-pageheader
+        div.container
+          h1 OrgMonitor
+          p.lead #{creds.length} monitored Orgs
+    .container.mb-3
+      .row.mb-2
+        .col-12.text-center
+          | Sort by 
+          .btn-group.sortby-btn-group(data-toggle='buttons')
+            label.btn.btn-light(data-sort="name")
+              input(type='radio', name='sort')
+              |  Name
+            label.btn.btn-light(data-sort="healthCheckScore")
+              input(type='radio', name='sort')
+              |  Health Check score
+            label.btn.btn-light.active(data-sort="original-order")
+              input(type='radio', name='sort')
+              |  Date added
+      .row.entries
+        each cred in creds
+          .col-xl-4.col-lg-4.col-md-6.col-sm-12.p-2.entry
+            div(class=(cred.failed?'card text-white bg-danger':'card'))
+              if cred.attributes
+                .ribbons
+                  each attribute in cred.attributes
+                    .ribbon(class=attribute.color)= attribute.name
+              .card-body
+                h4.card-title.name= cred.name || cred.orgId
+                p.info
+                  span.card-text.text-muted.indicator
+                    i(class='fa fa-fw fa-user-o')
+                    | #{cred.username}
+                  span.card-text.text-muted.indicator
+                    i(class='fa fa-fw fa-building-o')
+                    | #{cred.orgId}
+                  span.card-text.text-muted.indicator
+                    i(class='fa fa-fw fa-medkit')
+                    span.healthCheckScore #{cred.healthCheckScore}
+                if cred.description
+                  p.card-text= cred.description
+              .card-footer
+                a(href='/get/' + cred.orgId) View
+  script(type="text/javascript" src="/public/jquery.min.js")
+  script(type="text/javascript" src="/public/popper.min.js")
+  script(type="text/javascript" src="/public/bootstrap-4.0.0-beta.2-dist/js/bootstrap.min.js")
+  script(type="text/javascript" src="/public/isotope.pkgd.min.js")
+  script.
+    var $grid
+    $(document).ready(function() {
+      // isotope
+      $grid = $('.entries').isotope({
+        layoutMode: 'fitRows',
+        itemSelector: '.entry',
+        getSortData: {
+          name: '.name',
+          healthCheckScore: '.healthCheckScore parseInt'
+        }
+      });
+
+      // bind sort button click
+      $('.sortby-btn-group').on('click', 'label', function() {
+        var sortValue = $(this).attr('data-sort');
+        $grid.isotope({ sortBy: sortValue });
+      });
+    })

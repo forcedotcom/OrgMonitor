@@ -1,0 +1,100 @@
+//-
+  Copyright (c) 2017, salesforce.com, inc.
+  All rights reserved.
+  Licensed under the BSD 3-Clause license.
+  For full license text, see LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  
+mixin parseObject(obj, keys)
+  table.table(cellspacing=0, cellpadding=0, width="100%")
+    thead.thead-light
+      tr
+        for val,key in keys
+          th= key
+    tbody
+      each row in obj
+        tr
+          each field in row
+            if field === null
+              td
+            if field !== null && typeof field !== 'object'
+              td= field
+            //- For things like Profile.Name
+            if field !== null && typeof field === 'object' && field.hasOwnProperty('Name')
+              td= field.Name
+            //- For nested `records` objects
+            if field !== null && typeof field === 'object' && field.hasOwnProperty('records')
+              td
+                +parseObject(field.records, field.records[0])
+
+doctype html
+html(lang="en")
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title= org.name || org.orgId
+    link(rel="stylesheet" href="/public/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/public/font-awesome-4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/public/datatables/dataTables.bootstrap4.min.css")
+    link(rel="stylesheet" href="/public/custom.css")
+    body
+    nav(class="navbar navbar-expand-lg navbar-light bg-faded")
+      button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      div.container
+        div(class="collapse navbar-collapse" id="navbarSupportedContent")
+          ul.navbar-nav.mr-auto
+            li.nav-item
+              a.nav-item.nav-link(href="/") Home
+            li.nav-item
+              a.nav-item.nav-link(href="/rank") Rank
+    div.bd-pageheader
+        div.container
+          h1= org.name || org.orgId
+          p.lead Authenticated as #[strong #{org.username}], last updated #[strong #[span#timeago= orgData.time]]
+    .container.mb-3
+      .row
+        each answer in orgData.answers
+          .col-xl-4.col-lg-4.col-md-6.col-sm-12.p-2
+            .media
+              i(class='icon fa fa-fw ' + answer.icon)
+              .media-body
+                | #{answer.name}
+                if answer.error
+                  h3.mt-0 ERR
+                else if answer.a.records && answer.a.records[0] && answer.a.records[0].Score
+                  h3.mt-0 #{answer.a.records[0].Score}%
+                else
+                  if answer.a.records && answer.a.records.length > 0
+                    h3.mt-0
+                        a(data-toggle="modal" href="#" + answer.hash data-target='#' + answer.hash) #{answer.a.totalSize}✨
+                  else
+                    h3.mt-0= answer.a.totalSize
+                if answer.error
+                  p
+                    small.text-muted= answer.error
+      .row  
+        each answer in orgData.answers
+          if !answer.error && answer.a.records && answer.a.records.length > 0
+            .modal(tabindex="-1" role="dialog" aria-hidden="true" id=answer.hash)
+              .modal-dialog.modal-lg(role="document")
+                .modal-content
+                  .modal-header
+                    h5.modal-title= answer.name
+                    button(type="button" class="close" data-dismiss="modal") &times;
+                  .modal-body
+                    +parseObject(answer.a.records, answer.a.records[0])
+  script(type="text/javascript" src="/public/jquery.min.js")
+  script(type="text/javascript" src="/public/popper.min.js")
+  script(type="text/javascript" src="/public/bootstrap-4.0.0-beta.2-dist/js/bootstrap.min.js")
+  script(type="text/javascript" src="/public/moment.min.js")
+  script(type="text/javascript" src="/public/datatables/jquery.dataTables.min.js")
+  script(type="text/javascript" src="/public/datatables/dataTables.bootstrap4.min.js")
+  script.
+    $(document).ready(function() {
+      moment.relativeTimeThreshold('m', 60);document.getElementById("timeago").textContent = moment(#{orgData.time}).fromNow(); // set time
+      if (window.location.hash && $(window.location.hash).length) $(window.location.hash).modal('show'); // show modal on page load
+      $('a[data-toggle="modal"]').click(function(){ window.location.hash = $(this).attr('href'); }); // set hash when opening modal
+      $('.modal').on('hidden.bs.modal', function () { var original = window.location.href.substr(0, window.location.href.indexOf('#')); history.replaceState({}, document.title, original); }); // remove hash when closing modal
+      $('table').DataTable({
+        lengthMenu: [[15, 50, 100, -1], [15, 50, 100, "All"]]
+      });
+    });
