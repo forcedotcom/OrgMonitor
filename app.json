@@ -10,7 +10,7 @@
     "success_url": "/",
     "env": {
       "NODE_ENV": {
-        "description": "set to [development|product] allows the application to bypass the built-in SAML SSO auth",
+        "description": "set to [development|product] allows the application to bypass the built-in SAML SSO auth (dev) or not (prod)",
         "value": "development"
       },
       "CLIENT_ID": {
@@ -31,15 +31,15 @@
       },
       "COKIE_SECRET": {
         "description": "secret used to sign the session cookie",
-        "value": "YOU NEED SOMETHING SECURE"
+        "value": "<SET THIS VALUE>"
       },  
       "ADMIN_TOKEN": {
         "description": "secret used to edit/delete Org information such as name or description",
-        "value": "password"
+        "value": "<SET THIS VALUE>"
       },   
       "ENCRYPTION_KEY": {
         "description": "hex string representing 32 random bytes, used to encrypt/decrypt the Oauth refresh tokens (AES 256)",
-        "value": "7d457d22372c466f676d34497b7a3626667e78223f674a6538497e6e75"
+        "value": "<SET THIS VALUE>"
       },
       "SAML_ENTRY_POINT" : {
         "description": "refer to the Passport-SAML - https://github.com/bergie/passport-saml",
