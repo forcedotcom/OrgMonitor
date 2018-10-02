@@ -93,13 +93,13 @@ funky-medina-23982
 4. Check "Enable OAuth Settings"
 5. Set "Callback URL" to https://funky-medina-23982.herokuapp.com/callback (replace with actual app name)
 6. Select the following OAuth Scopes:
-  - `Access and manage your data (api)`
-  - `Perform requests on your behalf at any time (refresh_token, offline_access)`
+  - Access and manage your data (api)
+  - Perform requests on your behalf at any time (refresh_token, offline_access)
 7. Save to close
 
 #### Gather Info (to replace below)
-1. Reopen the Connected app and note down the "Consumer Key" and "Consumer Secret"
-2. Hex encode 32 characters of random characters (http://www.convertstring.com/EncodeDecode/HexEncode)
+1. Reopen the Connected app and note down the "Consumer Key" (`CLIENT_ID`) and "Consumer Secret" (`CLIENT_SECRET`))
+2. Hex encode 32 characters of random characters (http://www.convertstring.com/EncodeDecode/HexEncode) (`ENCRYPTION_KEY`)
 3. Create yourself a password for `ADMIN_TOKEN`
 4. Create yourself a password for `COOKIE_SECRET`
 
@@ -137,7 +137,7 @@ open https://$APP_NAME.herokuapp.com
 Now is a good time to ensure you can open the app in the browser. From here either follow the next section on how to configure SAML for authentication or skip it to move to adding an org to OrgMonitor.
 
 #### My Domain and SAML
-1. In Salesforce Setup enable My Domain and deploy to all users (if not enabled). Note down the custom domain you've chosen. Below I use `demoitout.my.salesforce.com`
+1. In Salesforce Setup enable My Domain and deploy to all users (if not enabled). Note down the custom domain you've chosen. Below I use `demoitout.my.salesforce.com` (see when I set SAML_ENTRY_POINT)
 2. Search for "Identity Provider" in Setup and ensure Identity Provider is enabled
 3. Search for "Single Sign-On Setings" in Setup and open
 4. Ensure "SAML Enabled" is checked
