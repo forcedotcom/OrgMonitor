@@ -8,7 +8,6 @@
 const express = require('express')
 const router = express.Router()
 const jsforce = require('jsforce')
-// const _ = require('lodash')
 const compare = require('secure-compare')
 const Org = require('../lib/org.js')
 const Crypto = require('../lib/crypto.js')
@@ -78,7 +77,7 @@ router.get('/callback', async (req, res) => {
     instanceUrl: conn.instanceUrl,
     loginUrl: conn.loginUrl,
     refreshToken: Crypto.encrypt(conn.refreshToken),
-    healthCheckScore: 'Syncing..'
+    healthCheckScore: 'Syncing...'
   }
 
   // Store credentials in DB
