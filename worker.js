@@ -10,7 +10,7 @@ const Org = require('./lib/org.js')
 
 agenda.define('refreshOrg', async (job, done) => {
   const jobData = job.attrs.data
-  console.log(`[${jobData.orgId}] Syncing..`)
+  console.log(`[${jobData.orgId}] Syncing...`)
   let org = await Org.get(jobData.orgId)
   let data = await org.fetchRemoteData()
   await Org.saveData(data)
