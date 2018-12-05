@@ -6,29 +6,23 @@
 */
 
 const agenda = require('./lib/agenda.js')
-const Org = require('./lib/org.js')
 
-agenda.define('refreshOrg', async (job, done) => {
+agenda.on('ready', async () => {
+  require('./lib/job.js')(agenda)
+  agenda.start()
+})
+
+agenda.on('fail', (err, job) => {
   const jobData = job.attrs.data
-  console.log(`[${jobData.orgId}] Syncing..`)
-  let org = await Org.get(jobData.orgId)
-  let data = await org.fetchRemoteData()
-  await Org.saveData(data)
-  done()
+  console.error(`[${jobData.orgId}] Job failed with error: ${err.message}`)
 })
 
-agenda.define('deleteOldRecords', async (job, done) => {
-  console.log(`Deleting old records..`)
-  await Org.deleteOldRecords()
-  done()
-})
-
-function graceful () {
-  console.log('Shutting down worker')
-  agenda.stop(function () {
-    process.exit(0)
-  })
+async function graceful () {
+  console.log(`Worker #${process.pid} shutting down`)
+  await agenda.stop()
+  process.exit(0)
 }
 
 process.on('SIGTERM', graceful)
 process.on('SIGINT', graceful)
+console.log(`Worker #${process.pid} online`)
