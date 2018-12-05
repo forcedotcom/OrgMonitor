@@ -39,7 +39,7 @@ The application requires:
   - `CORP_DOMAIN` is your corporate domain (i.e.: mycompany.com) used to identify Salesforce users without corporate email
   - `COOKIE_SECRET` is a secret used to sign the session cookie
   - `ADMIN_TOKEN` is a secret used to edit/delete Org information such as name or description
-  - `ENCRYPTION_KEY` is a hex string representing 32 random bytes, used to encrypt/decrypt the Oauth refresh tokens (AES 256)
+  - `ENCRYPTION_KEY` is a hex string representing 32 random bytes, used to encrypt/decrypt the Oauth refresh tokens (AES 256). Generate one with `openssl rand -hex 32`.
 3. Install Node.js dependencies through Yarn, with `yarn install`
 4. Run the server with `node server.js`, confirm you see the `App listening on port 3000` message in the console
 5. Load `http://localhost:3000/setup`, confirm you see the `Successfully setup DB` message in the console
