@@ -15,6 +15,7 @@ const session = require('express-session')
 const bodyparser = require('body-parser')
 const routes = require('./routes/index.js')
 const db = require('./lib/db.js')
+const serializeError = require('serialize-error')
 
 /* Express Config */
 let app = express()
@@ -62,6 +63,6 @@ app.listen(port, () => {
 /* Error handlers */
 app.use((err, req, res, next) => {
   let email = (req.user && req.user.email) || 'user@example.org'
-  console.error(`[${email}] Unhandled application error`, err)
+  console.error(`[${email}] Unhandled application error`, serializeError(err))
   res.status(500).send(err)
 })
