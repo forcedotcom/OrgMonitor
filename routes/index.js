@@ -104,7 +104,7 @@ router.get('/callback', async (req, res) => {
     return res.json({ success: false, error: e.message })
   }
 
-  res.redirect('/get')
+  res.redirect('/')
 })
 
 /* Other routes */
