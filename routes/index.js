@@ -8,7 +8,6 @@
 const express = require('express')
 const router = express.Router()
 const jsforce = require('jsforce')
-// const _ = require('lodash')
 const compare = require('secure-compare')
 const Org = require('../lib/org.js')
 const Crypto = require('../lib/crypto.js')
@@ -16,6 +15,7 @@ const oauth2model = require('../lib/oauth2.js')
 const agenda = require('../lib/agenda.js')
 const passport = require('passport')
 const Promise = require('bluebird')
+const serializeError = require('serialize-error')
 
 /* Saml */
 
@@ -88,7 +88,7 @@ router.get('/callback', async (req, res) => {
     await db.creds.saveDoc(env) // create or update
     console.log(`[${env.orgId}] Successfully stored credentials`)
   } catch (e) {
-    console.error(`[${env.orgId}] Error while storing credentials`, e)
+    console.error(`[${env.orgId}] Error while storing credentials`, serializeError(e))
     return res.json({ success: false, error: e.message })
   }
 
@@ -100,7 +100,7 @@ router.get('/callback', async (req, res) => {
     job.save()
     console.log(`[${env.orgId}] Successfully scheduled job`)
   } catch (e) {
-    console.error(`[${env.orgId}] Error while scheduling job`, e)
+    console.error(`[${env.orgId}] Error while scheduling job`, serializeError(e))
     return res.json({ success: false, error: e.message })
   }
 
@@ -109,8 +109,15 @@ router.get('/callback', async (req, res) => {
 
 /* Other routes */
 
-router.get('/', SAMLauthed, (req, res) => {
-  res.redirect('/get')
+router.get('/', SAMLauthed, async (req, res) => {
+  try {
+    const creds = await Org.getAllCreds()
+    res.render('orgs', {
+      creds: creds
+    })
+  } catch (e) {
+    res.json({ success: false, error: e.message })
+  }
 })
 
 router.get('/rank', SAMLauthed, async (req, res) => {
@@ -121,17 +128,6 @@ router.get('/rank', SAMLauthed, async (req, res) => {
   res.render('rank', {
     orgs: orgsData
   })
-})
-
-router.get('/get', SAMLauthed, async (req, res) => {
-  try {
-    const creds = await Org.getAllCreds()
-    res.render('orgs', {
-      creds: creds
-    })
-  } catch (e) {
-    res.json({ success: false, error: e.message })
-  }
 })
 
 router.get('/get/:orgId', SAMLauthed, async (req, res) => {
@@ -166,7 +162,7 @@ router.post('/wipe/:orgId', async (req, res) => {
   if (!compare(adminToken, process.env.ADMIN_TOKEN)) return res.json({ success: false, err: 'Invalid token' })
   const orgId = req.params.orgId
   try {
-    await Org.delete(orgId)
+    agenda.now('deleteOrg', { orgId: orgId })
     res.json({ success: true })
   } catch (e) {
     res.json({ success: false, err: e })
@@ -195,19 +191,18 @@ router.post('/edit/:orgId', async (req, res) => {
   }
 })
 
-router.post('/refresh', async(req, res) => {
+router.post('/refresh', async (req, res) => {
   const adminToken = req.get('Admin-Token')
   if (!compare(adminToken, process.env.ADMIN_TOKEN)) return res.json({ success: false, err: 'Invalid token' })
   const creds = await Org.getAllCreds()
   creds.map(async cred => {
-    let org = await Org.get(cred.orgId)
-    let data = await org.fetchRemoteData()
-    await Org.saveData(data)
+    agenda.now('refreshOrg', { orgId: cred.orgId })
   })
   res.send({ success: true })
 })
 
 router.post('/reschedule', async (req, res) => {
+  // Delete existing records first, i.e.: db.getCollection('agendaJobs').remove({})
   const adminToken = req.get('Admin-Token')
   if (!compare(adminToken, process.env.ADMIN_TOKEN)) return res.json({ success: false, err: 'Invalid token' })
   try {
@@ -219,6 +214,12 @@ router.post('/reschedule', async (req, res) => {
       job.save()
       console.log(`[${cred.orgId}] Successfully scheduled job`)
     })
+
+    let job = agenda.create('deleteOldRecords', { id: 1 })
+    job.unique({ id: 1 }) // guarantees uniqueness
+    job.repeatEvery('1 day')
+    job.save()
+
     res.send({ success: true })
   } catch (e) {
     res.json({ success: false, error: e.message })
