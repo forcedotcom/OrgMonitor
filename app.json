@@ -1,0 +1,69 @@
+{
+    "name": "Salesforce Org Monitor",
+    "description": "This application runs security health checks on Salesforce instances.",
+    "keywords": [
+      "Salesforce",
+      "Security",
+      "Health Check"
+    ],
+    "repository": "https://github.com/forcedotcom/OrgMonitor",
+    "success_url": "/",
+    "env": {
+      "NODE_ENV": {
+        "description": "set to [development|product] allows the application to bypass the built-in SAML SSO auth (dev) or not (prod)",
+        "value": "development"
+      },
+      "CLIENT_ID": {
+        "description": "the Connected App's Consumer Key value",
+        "value": "<SET THIS VALUE>"
+      },
+      "CLIENT_SECRET": {
+        "description": "the Connected App's Consumer Secret value",
+        "value": "<SET THIS VALUE>"
+      },
+      "REDIRECT_URI": {
+        "description": "the Connected App's Callback URL value",
+        "value": "<SET THIS VALUE>"
+      },      
+      "CORP_DOMAIN": {
+        "description": "your corporate domain (i.e.: mycompany.com) used to identify Salesforce users without corporate email",
+        "value": "<SET THIS VALUE>"
+      },
+      "COKIE_SECRET": {
+        "description": "secret used to sign the session cookie",
+        "value": "<SET THIS VALUE>"
+      },  
+      "ADMIN_TOKEN": {
+        "description": "secret used to edit/delete Org information such as name or description",
+        "value": "<SET THIS VALUE>"
+      },   
+      "ENCRYPTION_KEY": {
+        "description": "hex string representing 32 random bytes, used to encrypt/decrypt the Oauth refresh tokens (AES 256)",
+        "value": "<SET THIS VALUE>"
+      },
+      "SAML_ENTRY_POINT" : {
+        "description": "refer to the Passport-SAML - https://github.com/bergie/passport-saml",
+        "value" : "SET FOR PRODUCTION"
+      },   
+      "SAML_ISSUER" : {
+        "description": "refer to the Passport-SAML - https://github.com/bergie/passport-saml",
+        "value" : "SET FOR PRODUCTION"
+      },   
+      "SAML_CALLBACK" : {
+        "description": "refer to the Passport-SAML - https://github.com/bergie/passport-saml",
+        "value" : "SET FOR PRODUCTION"
+      },   
+      "SAML_CERT" : {
+        "description": "refer to the Passport-SAML - https://github.com/bergie/passport-saml",
+        "value" : "SET FOR PRODUCTION"
+      }                            
+    },
+    "addons": [
+      {
+        "plan": "mongolab"
+      },
+      {
+        "plan": "heroku-postgresql"
+      }
+    ]
+  }

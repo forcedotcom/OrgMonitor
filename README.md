@@ -55,6 +55,8 @@ The application requires:
 
 When ready for production deployment:
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 1. Edit the Connected App and include the new hostname to the `Callback URL` value
 2. Update the application's `REDIRECT_URI` value to match the `Callback URL` 
 3. Update the application's `NODE_ENV` value to `production` and add the following ENV variables (refer to the [Passport-SAML](https://github.com/bergie/passport-saml) documentation on how to set these) to enable SAML SSO auth in order to protect access to the application's data:
