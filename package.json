@@ -17,7 +17,7 @@
     "helmet": "3.15.0",
     "jsforce": "1.9.1",
     "lodash": "4.17.11",
-    "massive": "5.7.0",
+    "massive": "6.6.0",
     "numeral": "2.0.6",
     "omit-deep": "0.3.0",
     "passport": "0.4.0",
